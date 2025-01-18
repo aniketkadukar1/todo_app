@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from .models import Task
 from .forms import AddTaskForm
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
-    task_list = Task.objects.all()
+    all_tasks = Task.objects.all()
+    paginator = Paginator(all_tasks, 5)
+    page_number = request.GET.get("page")
+    task_list = paginator.get_page(page_number)
+    
     task_count = Task.objects.count()
     context = {'task_list': task_list, 'task_count': task_count}
     return render(request, 'todo/index.html', context=context)
