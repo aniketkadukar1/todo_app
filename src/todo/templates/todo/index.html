@@ -17,11 +17,17 @@
     {% for task in task_list %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <div class="d-flex">
+
+        <form action="{% url "todo:mark_completed" task.pk %}"  method="get">
             <!-- Checkbox -->
             <input type="checkbox" 
             class="form-check-input me-3" 
             style="width: 1.5rem; height: 1.5rem;" 
             {% if task.is_completed %}checked{% endif %}>
+        </form>
+        
+
+
             <!-- Task Details -->
             <div>
                 <strong>{{ task.title }}</strong>
@@ -34,8 +40,12 @@
 
         <!-- Buttons -->
         <div>
+            <form action="{% url "todo:edit_task" task.pk %}" method="get" style="display: inline;">
             <button class="btn btn-sm btn-dark me-2">Edit</button>
-            <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
+            <form action="{% url "todo:delete_task" task.pk %}" method="get" style="display: inline;">
+            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this task?')" >Delete</button>
+            </form>
         </div>
     </li>
     {% endfor %}
