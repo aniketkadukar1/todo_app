@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import AddTaskForm
 from django.core.paginator import Paginator
@@ -43,10 +43,12 @@ def delete_task(request, task_id):
     return redirect('todo:index')
 
 def mark_completed(request, task_id):
-    if request.method == 'GET':
-        task = Task.objects.get(task_id)
-        print(request.POST)
-    return redirect('todo:index')
+    task = get_object_or_404(Task, pk=task_id)
+    if request.method == "POST":
+        is_completed = request.POST.get("is_completed") == "true"
+        task.is_completed = is_completed
+        task.save()
+    return redirect("todo:index")
 
 
         

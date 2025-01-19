@@ -18,13 +18,16 @@
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <div class="d-flex">
 
-        <form action="{% url "todo:mark_completed" task.pk %}"  method="get">
-            <!-- Checkbox -->
-            <input type="checkbox" 
-            class="form-check-input me-3" 
-            style="width: 1.5rem; height: 1.5rem;" 
-            {% if task.is_completed %}checked{% endif %}>
-        </form>
+            <form action="{% url 'todo:mark_completed' task.pk %}" method="post">
+                {% csrf_token %}
+                <input type="checkbox" 
+                       class="form-check-input me-3" 
+                       style="width: 1.5rem; height: 1.5rem;" 
+                       name="is_completed" 
+                       value="true"
+                       {% if task.is_completed %}checked disabled{% endif %}
+                       onchange="this.form.submit();">
+            </form>
         
 
 
