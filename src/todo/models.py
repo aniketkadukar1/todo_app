@@ -16,6 +16,9 @@ class Task(models.Model):
         """ custom validation to ensure deadline is in future"""
         if self.deadline <= date.today():
             raise ValidationError("The deadline must be in the future.")
+        
+        if Task.objects.filter(title = self.title).exists():
+            raise ValidationError("Task with this title already exist. Please use another task title.")
     
     def save(self, *args, **kwargs):
         """ Ensure clean is called before saving the object"""
