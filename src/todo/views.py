@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import AddTaskForm
 from django.core.paginator import Paginator
+from datetime import date
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 def index(request):
@@ -45,6 +47,8 @@ def delete_task(request, task_id):
 def mark_completed(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     if request.method == "POST":
+        if task.deadline <= date.today():
+            raise ValidationError("You can't mark overdue task completed. Please delete the  task.")
         is_completed = request.POST.get("is_completed") == "true"
         task.is_completed = is_completed
         task.save()
